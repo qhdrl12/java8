@@ -11,8 +11,10 @@ import java.util.Scanner;import org.springframework.boot.web.server.MimeMappings
 public class Cjtest {
 	
 	
-	private static List<String> cho = Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9");
-	private static Map<Integer, List<String>> map = new HashMap<>();
+//	private static List<String> cho = Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9");
+	static String[] strs = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
+	
+	private static Map<Integer, String[]> map = new HashMap<>();
 	private static int mapIndex = 1;
 	
 	public static void main(String[] args) {
@@ -32,26 +34,36 @@ public class Cjtest {
 		char[] cArray = sb.toString().toCharArray();
 		for (char c : cArray) {
 			int count = 1;
-			System.out.println("c : " + c);
+			System.out.print("char : " + c);
 			boolean result = true;
 			while (result) {
-//			do {
 				if (map.get(count) == null) {
+					System.out.print("initMap : " + mapIndex);
 					mapIndex++;
 					initMap(mapIndex);
-					continue;
+					count = mapIndex;
 				}
 				
-				int listIdx = map.get(count).indexOf(String.valueOf(c));
+				System.out.println(", count : " + count);
+
+
+				int listIdx = Arrays.asList(map.get(count)).indexOf(String.valueOf(c));
+				if ( listIdx == -1) {
+					if (String.valueOf(c).equals("6")) {
+						listIdx = Arrays.asList(map.get(count)).indexOf("9");	
+					} else if (String.valueOf(c).equals("9")) {
+						listIdx = Arrays.asList(map.get(count)).indexOf("6");
+					}
+				}
+					
 				System.out.println("idx : " + listIdx);
 				if (listIdx > -1) {
-					map.get(count).set(listIdx, null);
+					map.get(count)[listIdx] = "0";
 					result = false;
 				} else {
 					count++;
 				}
 			}
-//			} while (result==true);
 			
 		}
 		
@@ -60,6 +72,6 @@ public class Cjtest {
 	}
 	
 	private static void initMap(int idx) {
-		map.put(mapIndex, cho);
+		map.put(mapIndex, Arrays.copyOf(strs, strs.length));
 	}
 }
